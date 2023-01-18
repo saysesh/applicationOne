@@ -9,18 +9,18 @@ import UIKit
 import SnapKit
 
 class ViewController: UIViewController {
-    private let myTitles: [String] = ["Title"]
+//    private let myTitles: [String] = ["Title"]
 //    let rowPerSection = [2,4,6]
     
 var tableView = UITableView()
-    var images: [image] = []
+    var images: [[image]] = []
     struct Cells {
         static let imageCell = "ImageCell"
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        images = fetchData()
+        images  = fetchData()
         configureTableView()
         
     
@@ -43,27 +43,28 @@ var tableView = UITableView()
 extension ViewController: UITableViewDelegate, UITableViewDataSource{
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return myTitles.count
+        return images.count
     }
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "Menu"
-//        switch(section){
-//        case 0: return "Breakfast"
-//        case 1: return "Salads"
-//        case 2: return "Drinks"
-//        default: return "----"
-//        }
+//        return "Menu"
+        switch(section){
+        case 0: return "Breakfast"
+        case 1: return "Salads"
+        case 2: return "Drinks"
+        default: return "----"
+        }
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 //        return rowPerSection[section]
-        return images.count
+        return images[section].count
     }
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Cells.imageCell) as! ImageCell
-        let image = images[indexPath.row]
-        cell.set(image: image)
+        let image = images[indexPath.section]
+        let item  = image[indexPath.row]
+        cell.set(image: item)
         
         return cell
     }
@@ -86,14 +87,14 @@ private extension ViewController {
 //MARK: - Generating Data
 
 extension ViewController {
-    func fetchData() -> [image]{
+    func fetchData() -> [[image]]{
         let image1 = image(image: Images.breakfast, title: "Венские вафли", price: "3850 тг")
         let image2 = image(image: Images.breakfastTwo, title: "Каша с  ягодами", price: "1650 тг")
         let image3 = image(image: Images.salmon, title: "Филе лосося", price: "6350 тг")
         let image4 = image(image: Images.salad, title: "Теплый салат", price: "3850 тг")
         let image5 = image(image: Images.coctail, title: "Джин Физз", price: "2650 тг")
         let image6 = image(image: Images.coffe, title: "Кофе Раф", price: "1700 тг")
-        return [image1,image2,image3,image4,image5,image6]
+        return [[image1,image2,],[image3,image4],[image5,image6]]
         
     }
 }
