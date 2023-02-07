@@ -53,6 +53,15 @@ class PlacesTableViewCell: UITableViewCell {
         placeImageView.image = UIImage(named: place.imageName)
         
     }
+    func configure2(with model: MovieModel) {
+        guard let url = URL(string: "\(Constants.Links.imageURL)\(model.backdropPath)") else { fatalError("Incorrect Link in configure2")}
+        DispatchQueue.main.async {
+            self.placeImageView.kf.setImage(with: url)
+            self.placeNameLabel.text = model.title
+            self.placeLocationLabel.text = model.description
+        }
+    
+    }
     
 }
 

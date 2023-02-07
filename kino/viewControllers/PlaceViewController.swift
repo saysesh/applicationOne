@@ -8,7 +8,11 @@
 import UIKit
 import SnapKit
 
-class PlaceViewController: UIViewController, UICollectionViewDelegate {
+final class PlaceViewController: UIViewController, UICollectionViewDelegate {
+    
+    
+    var apiCaller = APICaller()
+    var nowMovieList: [MovieModel] = []
     
     private let scrollView  = UIScrollView()
     private let contentView = UIView()
@@ -20,7 +24,7 @@ class PlaceViewController: UIViewController, UICollectionViewDelegate {
 //        searchBar.layer.borderWidth = 1
 //        searchBar.layer.borderColor = .init(red: 0, green: 0, blue: 0, alpha: 1)
         searchBar.searchBarStyle = .minimal
-        searchBar.placeholder = "Search theathres"
+        searchBar.placeholder = "Search for now playing movies"
         return searchBar
     }()
     
@@ -49,15 +53,41 @@ class PlaceViewController: UIViewController, UICollectionViewDelegate {
     }()
     
     override func viewDidLoad() {
+
         super.viewDidLoad()
-        setupViews()
-        setupConstraints()
+        
         categoryCollectionView.dataSource = self
         categoryCollectionView.delegate   = self
         PlacesTableView.dataSource        = self
         PlacesTableView.delegate          = self
+        apiCaller.delegate2               = self
+        apiCaller.fetchData()
+       
 
         view.backgroundColor = .systemBackground
+        setupViews()
+        setupConstraints()
+        print(nowMovieList)
+
+
+    }
+    
+    
+}
+
+//MARK: - API Caller delegate methods
+
+extension PlaceViewController: APICallerDelegate2 {
+    
+    func didUpdateMovieList(with nowMovieList: [MovieModel]) {
+        self.nowMovieList.append(contentsOf: nowMovieList)
+        DispatchQueue.main.async {
+            self.PlacesTableView.reloadData()
+        }
+    }
+    
+    func didFailWithError(_ error: Error) {
+        print("FAILED WITH ERROR", error)
     }
 }
 
@@ -98,12 +128,13 @@ extension PlaceViewController: UICollectionViewDelegateFlowLayout {
 extension PlaceViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        DataBase.placeList.count
+        nowMovieList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ID", for: indexPath) as! PlacesTableViewCell
-        cell.configure(with: DataBase.placeList[indexPath.row])
+//        cell.configure(with: DataBase.placeList[indexPath.row])
+        cell.configure2(with: nowMovieList[indexPath.row])
         return cell
     }
     
@@ -136,7 +167,9 @@ private extension PlaceViewController {
         movieSearchBar.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
             make.height.equalTo(view).multipliedBy(0.06)
-            
+        }
+        movieSearchBar.searchTextField.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
         categoryCollectionView.snp.makeConstraints { make in
             make.top.equalTo(movieSearchBar.snp.bottom).offset(10)

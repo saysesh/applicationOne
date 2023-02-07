@@ -7,4 +7,5 @@ target 'kino' do
 
   # Pods for kino
 pod 'SnapKit'
+pod 'Kingfisher'
 end

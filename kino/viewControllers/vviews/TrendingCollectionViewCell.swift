@@ -27,6 +27,13 @@ final class TrendingCollectionViewCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    func configure(with bakdropPath: String) {
+        guard let url = URL(string: "\(Constants.Links.imageURL)\(bakdropPath)") else { fatalError("Incorrect link in configure") }
+        DispatchQueue.main.async {
+            self.trendingImageView.kf.setImage(with: url)
+        }
+    }
 }
 //MARK: - Setup views and constraints methods
 
