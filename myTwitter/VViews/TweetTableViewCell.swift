@@ -16,8 +16,7 @@ class TweetTableViewCell: UITableViewCell {
         imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = 25.99
         imageView.clipsToBounds = true
-        imageView.image = UIImage(systemName: "person")
-        imageView.backgroundColor = .red
+        imageView.image = UIImage(named: "musk")
         
         return imageView
     }()
@@ -25,7 +24,7 @@ class TweetTableViewCell: UITableViewCell {
     
     private lazy var displayNameLabel: UILabel = {
         let label = UILabel()
-        label.text = "Saida Yess"
+        label.text = "Elon Musk"
         label.font = .systemFont(ofSize: 18, weight: .bold)
         return label
         
@@ -33,7 +32,7 @@ class TweetTableViewCell: UITableViewCell {
     
     private lazy var userNameLabel: UILabel = {
         let label = UILabel()
-        label.text = "user0101"
+        label.text = "@elonmusk"
         label.font = .systemFont(ofSize: 16, weight: .regular)
         return label
         

@@ -25,8 +25,10 @@ class HomeViewController: UIViewController {
     }
     
     @objc private func didTapProfile() {
-        print("Profile")
+        let vc = ProfileViewController()
+        navigationController?.pushViewController(vc, animated: true)
     }
+    
     
     private lazy var timelineTableView: UITableView = {
         let tableView = UITableView()
@@ -44,9 +46,7 @@ class HomeViewController: UIViewController {
         
         setupViews()
         setupConstraints()
-        
     }
-    
 
 }
 
