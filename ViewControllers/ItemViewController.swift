@@ -14,6 +14,7 @@ final class ItemViewController: UIViewController {
     private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     private var models = [Todoey]()
+    private  var selectedSection: TodoeySection?
 
     
     private lazy var searchBar: UISearchBar = {
@@ -36,15 +37,21 @@ final class ItemViewController: UIViewController {
         view.backgroundColor = .systemBackground
         
         ItemManager.shared.delegate = self
-        ItemManager.shared.fetchItems()
+        ItemManager.shared.fetchItems(section: selectedSection!)
         
 
         itemTableView.dataSource = self
         itemTableView.delegate = self
 //        searchBar.delegate = self
+        
+        
         configureNavBar()
         setupViews()
         setupConstraints()
+    }
+    
+    func configure(with section: TodoeySection) {
+        selectedSection = section
     }
     
    
@@ -54,7 +61,7 @@ final class ItemViewController: UIViewController {
 
 private extension ItemViewController {
     func configureNavBar() {
-        navigationItem.title = "Todoey"
+        navigationItem.title = selectedSection?.name
         let add = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonPressed))
         navigationItem.rightBarButtonItem = add
         navigationController?.navigationBar.tintColor = .label
@@ -145,7 +152,7 @@ extension ItemViewController: UISearchBarDelegate {
     }
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
-        ItemManager.shared.fetchItems(with: searchText)
+        ItemManager.shared.fetchItems(with: searchText, section: selectedSection!)
         
     }
 }

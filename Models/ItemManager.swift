@@ -23,12 +23,18 @@ struct ItemManager {
     static var shared = ItemManager()
     
     
-    func fetchItems(with text: String = "") {
+    func fetchItems(with text: String = "", section: TodoeySection) {
         do {
             let request = Todoey.fetchRequest()
             if text != "" {
-                let predicate = NSPredicate(format: "name = %@", text)
-                request.predicate = predicate
+                let firstPredicate = NSPredicate(format: "name CONTAINS %@", text)
+                let secondPredicate = NSPredicate(format: "section == %@", section)
+                
+                let andPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [firstPredicate, secondPredicate])
+                request.predicate = andPredicate
+            } else {
+                let secondPredicate = NSPredicate(format: "section == %@", section)
+                request.predicate = secondPredicate
             }
             let desc = NSSortDescriptor(key: "name", ascending: true)
             request.sortDescriptors = [desc]
@@ -46,6 +52,7 @@ struct ItemManager {
             do {
                 try context.save()
                 let request = Todoey.fetchRequest()
+                
                 
                 let desc = NSSortDescriptor(key: "name", ascending: true)
                 request.sortDescriptors = [desc]

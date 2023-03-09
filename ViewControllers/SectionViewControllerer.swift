@@ -66,9 +66,9 @@ extension SectionViewController: UITableViewDelegate {
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let viewController = ItemViewController()
+        viewController.configure(with: sections[indexPath.row])
         navigationController?.pushViewController(viewController, animated: true)
-        
-    }
+        }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         return UISwipeActionsConfiguration(actions: [UIContextualAction(style: .destructive, title: "Delete", handler: {_, _, _ in
